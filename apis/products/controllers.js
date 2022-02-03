@@ -1,10 +1,11 @@
 let data = require("../../data");
-
+const database = require("../../models/Product");
 exports.sayHello = (req, res) => {
   res.send("Hello World!");
 };
 
-exports.getAllProducts = (req, res) => {
+exports.getAllProducts = async (req, res) => {
+  data = await database.find();
   res.json(data);
 };
 
