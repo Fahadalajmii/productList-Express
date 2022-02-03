@@ -1,25 +1,48 @@
-let data = require("../../data");
-const database = require("../../models/Product");
+const dataBase = require("../../models/Product");
 exports.sayHello = (req, res) => {
   res.send("Hello World!");
 };
 
 exports.getAllProducts = async (req, res) => {
-  data = await database.find();
-  res.json(data);
+  const allData = await dataBase.find();
+  res.json(allData);
 };
 
-exports.findId = (req, res) => {
-  res.json(data.find((product) => +product.id === +req.params.id));
+exports.addData = async (req, res) => {
+  try {
+    const addData = req.body;
+    const newData = await dataBase.create(addData);
+    res.status(201).json(newData);
+  } catch (error) {
+    res.status(400).json({ msg: error });
+  }
 };
-exports.addData = (req, res) => {
-  data.push(req.body);
 
-  res.send("data have been added");
+exports.deleteData = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const deleteProduct = await dataBase.findByIdAndDelete(productId);
+    if (deleteProduct) {
+      res.status(200).json({ msg: "product deleted" });
+    } else {
+      res.status(404).json({ msg: "product not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ msg: error });
+  }
 };
 
-exports.deleteData = (req, res) => {
-  data = data.filter((product) => +product.id !== +req.params.productId);
-
-  res.status(204).send("data has been deleted");
+exports.updateData = async (req, res) => {
+  try {
+    const { productId } = req.params;
+    const newData = req.body;
+    const updateproduct = await dataBase.findByIdAndUpdate(productId, newData);
+    if (updateproduct) {
+      res.status(200).json(updateproduct);
+    } else {
+      res.status(404).json({ msg: "product not found" });
+    }
+  } catch (error) {
+    res.status(400).json({ msg: error });
+  }
 };

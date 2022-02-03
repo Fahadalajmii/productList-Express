@@ -4,19 +4,19 @@ const router = express();
 const {
   sayHello,
   getAllProducts,
-  findId,
   addData,
   deleteData,
+  updateData,
 } = require("./controllers");
 
 router.get("/", sayHello);
 
 router.get("/api/products", getAllProducts);
 
-router.get("/api/products/:id", findId);
-
 router.post("/api/products", addData);
 
 router.delete("/api/products/:productId", deleteData);
+
+router.put("/api/products/:productId", updateData);
 
 module.exports = router;
